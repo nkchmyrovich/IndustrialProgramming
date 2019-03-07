@@ -4,6 +4,9 @@ positive_list = []
 for it in input_list:
     if it[0] == '-':
         positive_list.append(it[1:])
+    else:
+        positive_list.append(it)
+
 
 
 def get_sum_figs(num):
