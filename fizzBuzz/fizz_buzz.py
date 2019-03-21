@@ -1,20 +1,41 @@
-input_list = []
-input_list = list(input().split(', '))
-positive_list = []
-for it in input_list:
-    if it[0] == '-':
-        positive_list.append(it[1:])
-    else:
-        positive_list.append(it)
+def process_input_data(input):
+    positive_data = []
+    for it in input:
+        if it[0] == '-':
+            positive_data.append(it[1:])
+        else:
+            positive_data.append(it)
+    result = []
+    for i in range(len(positive_data)):
+        string = ""
+        change = False
+        if is_divisible_by_three(positive_data[i]):
+            string += "fizz"
+            change = True
+        if is_divisible_by_five(positive_data[i]):
+            string += "buzz"
+            change = True
+        if change:
+            result.append(string)
+        else:
+            result.append(input[i])
+    return result
 
+
+def string_positive(string):
+    if string[0] == '-':
+        return string[1:]
+    else:
+        return string
 
 
 def get_sum_figs(num):
-    string = str(num)
+    string = string_positive(str(num))
     _sum = 0
     for char in string:
         _sum += int(char)
     return str(_sum)
+
 
 def is_divisible_by_five(num):
     string = str(num)
@@ -24,8 +45,8 @@ def is_divisible_by_five(num):
     else:
         return False
 
+
 def is_divisible_by_three(num):
-    string = str(num)
     a = num
     while int(a) >= 10:
         a = get_sum_figs(a)
@@ -34,20 +55,8 @@ def is_divisible_by_three(num):
     else:
         return False
 
-result = []
-for i in range(len(positive_list)):
-    string = ""
-    change = False
-    if is_divisible_by_three(positive_list[i]):
-        string += "fizz"
-        change = True
-    if is_divisible_by_five(positive_list[i]):
-        string += "buzz"
-        change = True
-    if change:
-        result.append(string)
-    else:
-        result.append(input_list[i])
 
-print(result)
-
+def main():
+    input = list(input().split(', '))
+    output = process_input_data(input)
+    print(output)
