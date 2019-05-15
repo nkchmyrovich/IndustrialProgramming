@@ -56,11 +56,16 @@ struct PageDesc
         
 
 /* storage for pages of all colors */
+//Bug may be:
 static PageDesc* PageStrg[ 3 ];
+//Fix bug: static PageDesc** PageStrg;
 
 void PageStrgInit()
 {
+    //Bug:
 	memset( PageStrg, 0, sizeof(&PageStrg) );
+	//Fix bug: memset(PageStrg, 0, sizeof(STR_LEN * NUM_COLORS));
+	//Where STR_LEN, NUM_COLORS are previously defined constants
 }
 
 PageDesc* PageFind( void* ptr, char color )
@@ -92,7 +97,9 @@ PageDesc* PageInit( void* ptr, UINT color )
 {
     PageDesc* pg = new PageDesc;
     if( pg )
+        //Bug
         PAGE_INIT(&pg, ptr, color);
+        //Fix bug: PAGE_INIT(pg, ptr, color);
     else
         printf("Allocation has failed\n");
     return pg;
@@ -104,7 +111,9 @@ PageDesc* PageInit( void* ptr, UINT color )
 void PageDump()
 {
 	UINT color = 0;
+	//Bug:
 	#define PG_COLOR_NAME(clr) #clr
+	//This define is useless
 	char* PgColorName[] = 
 	{
 		PG_COLOR_NAME(PG_COLOR_RED),
@@ -115,13 +124,19 @@ void PageDump()
 	while( color <= PG_COLOR_RED )
 	{
 		printf("PgStrg[(%s) %u] ********** \n", color, PgColorName[color] );
+		//Bug, ind out of range:
 		for( PageDesc* Pg = PageStrg[++color]; Pg != NULL; Pg = Pg->next )
+		//Fix bug: PageStrg[color++]
 		{
+		    //Bug:
 			if( Pg->uAddr = NULL )
+			//Fix bug: Pg->uAddr == NULL
 				continue;
 
 			printf("Pg :Key = 0x%x, addr %p\n", Pg->uKey, Pg->uAddr );
 		}
 	}
+	//Bug may be:
 	#undef PG_COLOR_NAME
+	//This undef could used earlier right after declaration of PgColorName
 }
